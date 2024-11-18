@@ -1,23 +1,25 @@
-arch:
-  - arm64
-  
+language: node_js
+node_js:
+  - 12
+
 services:
   - docker
-env:
-  - lava500/udagram-frontend
+
 # Pre-testing installs
 install:
-  - docker build -t ${IMAGE} .
+  - echo "nothing needs to be installed"
 
 # Scripts to be run such as tests
 before_script:
-  - echo "no tests"
+  - docker --version # print the version for logging
+  - docker-compose version
 
 script:
-  - docker --version # print the version for logging
-  - docker build -t lava500/udagram-frontend .
-  - docker tag udagram-frontend lava500/udagram-frontend
+  - docker-compose -f docker-compose-build.yaml build --parallel
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker push lava500/udagram-frontend
+  - docker push huysatoshi/udagram-api-user:v1a
+  - docker push huysatoshi/udagram-api-feed:v1a
+  - docker push huysatoshi/udagram-frontend:local
+  - docker push huysatoshi/reverseproxy:v1a
