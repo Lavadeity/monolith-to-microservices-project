@@ -1,0 +1,23 @@
+arch:
+  - arm64
+
+services:
+  - docker
+env:
+  - lava500/udagram-frontend
+# Pre-testing installs
+install:
+  - docker image build -t ${IMAGE} .
+
+# Scripts to be run such as tests
+before_script:
+  - echo "no tests"
+
+script:
+  - docker --version # print the version for logging
+  - docker build -t lava500/udagram-frontend .
+  - docker tag udagram-frontend lava500/udagram-frontend
+
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push lava500/udagram-frontend
