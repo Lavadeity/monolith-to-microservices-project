@@ -15,6 +15,10 @@ before_script:
   - docker --version # print the version for logging
   - docker-compose version
 
+before_install:
+  - docker pull lava500/udagram-frontend:v1
+
+
 script:
   - docker --version # Print Docker version for logging
   - export IMAGE="lava500/udagram-frontend:v1" # Set image name with a proper tag
