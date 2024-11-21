@@ -16,7 +16,11 @@ before_script:
   - docker-compose version
 
 script:
-  - docker-compose -f docker-compose-build.yaml build --parallel
+  - docker --version # Print Docker version for logging
+  - export IMAGE="lava500/udagram-frontend:v1" # Set image name with a proper tag
+  - docker build -t $IMAGE . # Build the image
+  - docker tag $IMAGE lava500/udagram-frontend # Tag the image
+
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
