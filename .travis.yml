@@ -4,31 +4,31 @@ node_js:
   - 12
 
 services:
-  - docker
-
-# Pre-testing installs
-install:
-  - echo "nothing needs to be installed"
-
-# Scripts to be run such as tests
-before_script:
-  - docker --version # print the version for logging
-  - docker-compose version
+  - docker  # Start Docker service
 
 before_install:
-  - docker pull lava500/udagram-frontend:v1
-
+  # Print Docker version for logging
+  - docker --version
 
 script:
-  - docker --version # Print Docker version for logging
-  - export IMAGE="lava500/udagram-frontend:v1" # Set image name with a proper tag
-  - docker build -t $IMAGE . # Build the image
-  - docker tag $IMAGE lava500/udagram-frontend # Tag the image
+  # Build the Docker images for each service
+  - docker build -t udagram-api-feed ./udagram-api-feed
+  - docker build -t udagram-api-user ./udagram-api-user
+  - docker build -t udagram-api-frontend ./udagram-api-frontend
+  - docker build -t udagram-api-reverse-proxy ./udagram-api-reverse-proxy
 
+  # Tag each image with the appropriate Docker Hub repository and version
+  - docker tag udagram-api-feed lava500/udagram-api-feed:v1
+  - docker tag udagram-api-user lava500/udagram-api-user:v1
+  - docker tag udagram-api-frontend lava500/udagram-api-frontend:v1
+  - docker tag udagram-api-reverse-proxy lava500/udagram-api-reverse-proxy:v1
 
 after_success:
+  # Docker login using credentials stored in Travis CI environment variables
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker push lava500/udagram-api-user:v1a
-  - docker push lava500/udagram-api-feed:v1a
-  - docker push lava500/udagram-frontend:local
-  - docker push lava500/reverseproxy:v1a
+  
+  # Push the tagged Docker images to Docker Hub
+  - docker push lava500/udagram-api-feed:v1
+  - docker push lava500/udagram-api-user:v1
+  - docker push lava500/udagram-api-frontend:v1
+  - docker push lava500/udagram-api-reverse-proxy:v1
