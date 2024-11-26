@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env-config
+data:
+  AWS_BUCKET: test-11080375544
+  AWS_PROFILE: default
+  AWS_REGION: us-west-1
+  POSTGRES_DB: cdr
+  POSTGRES_HOST: cdr.cvzhbbugw2dw.us-west-1.rds.amazonaws.com
+  URL: http://localhost:8100

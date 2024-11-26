@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-feed
+  labels:
+    service: backend-feed
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-feed
+  template:
+    metadata:
+      labels:
+        app: backend-feed
+    spec:
+      containers:
+      - name: backend-feed
+        image: lava500/udagram-api-feed:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+          - configMapRef:
+              name: env-config
+          - secretRef:
+              name: env-secret
+      volumes:
+        - name: aws-secret
+          secret:
+            secretName: aws-secret
+            items:
+            - key: credentials
+              path: ~/.aws/credentials
