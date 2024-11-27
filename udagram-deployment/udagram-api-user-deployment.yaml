@@ -5,7 +5,7 @@ metadata:
   labels:
     service: backend-user
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: backend-user
@@ -24,11 +24,11 @@ spec:
               name: env-config
           - secretRef:
               name: env-secret
-      volumes:
-        - name: aws-secret
-          secret:
-            secretName: aws-secret
-            items:
-            - key: credentials
-              path: ~/.aws/credentials
-        
+        resources:
+          requests:
+            cpu: "100m"    # Minimum CPU allocation (100 milliCPU)
+            memory: "128Mi" # Minimum memory allocation (128 MiB)
+          limits:
+            cpu: "500m"    # Maximum CPU allocation (500 milliCPU)
+            memory: "512Mi" # Maximum memory allocation (512 MiB)
+      

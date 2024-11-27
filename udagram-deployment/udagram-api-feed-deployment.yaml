@@ -24,10 +24,11 @@ spec:
               name: env-config
           - secretRef:
               name: env-secret
-      volumes:
-        - name: aws-secret
-          secret:
-            secretName: aws-secret
-            items:
-            - key: credentials
-              path: ~/.aws/credentials
+        resources:
+          requests:
+            cpu: "100m"  # Request 100 milliCPU (0.1 CPU)
+            memory: "128Mi"  # Request 128 MiB of memory
+          limits:
+            cpu: "500m"  # Limit to 500 milliCPU (0.5 CPU)
+            memory: "512Mi"  # Limit to 512 MiB of memory
+      
